@@ -1,3 +1,5 @@
+using GestionCompte;
+
 namespace GestionCompteTests;
 
 public class CompteParseurTests
