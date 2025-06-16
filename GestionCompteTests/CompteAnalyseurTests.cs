@@ -1,13 +1,17 @@
 using GestionCompte;
+using GestionCompte.models;
 using NSubstitute;
 
 namespace GestionCompteTests;
 
 public class CompteAnalyseurTests
 {
+    ICsvReader _reader;
+    
     [SetUp]
     public void Setup()
     {
+        _reader = Substitute.For<ICsvReader>();
     }
 
     [Test]
@@ -15,9 +19,8 @@ public class CompteAnalyseurTests
     {
         const string csvPath = "../../../../ressources/account_20230228.csv";
         const double expectedBalance = 15376.45;
-        var reader = new CsvReader();
         var factory = new TransactionFactory();
-        var analyseur = new CompteAnalyseur(reader, factory, csvPath);
+        var analyseur = new CompteAnalyseur(_reader, factory, csvPath);
 
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
 
@@ -25,14 +28,29 @@ public class CompteAnalyseurTests
     }
 
     [Test]
-    public void Analyseur_retourne_0_quand_fichier_vide()
+    public void Analyseur_retourne_rapport_pour_0_transaction()
     {
-        var reader = Substitute.For<ICsvReader>();
         var factory = Substitute.For<ITransactionFactory>();
-        var analyseur = new CompteAnalyseur(reader, factory, string.Empty);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
         Assert.That(result.Balance, Is.EqualTo(0));
+    }
+
+    [Test]
+    public void Analyseur_retourne_rapport_pour_1_transaction()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes")
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
+        
+        Assert.That(result.Balance, Is.EqualTo(5401.38));
     }
 }
