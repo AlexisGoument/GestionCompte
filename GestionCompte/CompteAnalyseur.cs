@@ -25,10 +25,12 @@ public class CompteAnalyseur
             .Aggregate(new CompteRapport(),
                 (rapport, transaction) =>
                 {
-                    if (transaction.Devise == "USD")
-                        rapport.Balance += transaction.Montant * 1.445;
-                    else
-                        rapport.Balance += transaction.Montant;
+                    rapport.Balance += transaction.Devise switch
+                    {
+                        "USD" => transaction.Montant * 1.445,
+                        "JPY" => transaction.Montant * 0.482,
+                        _ => transaction.Montant
+                    };
                     return rapport;
                 });
         return rapport;
