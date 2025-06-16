@@ -110,7 +110,7 @@ public class CompteAnalyseurTests
     }
 
     [Test]
-    public void Analyseur_retourne_converti_USD_en_EUR()
+    public void Analyseur_converti_USD_en_EUR()
     {
         var factory = Substitute.For<ITransactionFactory>();
         var transactions = new[]
@@ -124,5 +124,22 @@ public class CompteAnalyseurTests
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
         Assert.That(result.Balance, Is.EqualTo(7804.9941).Within(Tolerance));
+    }
+
+    [Test]
+    public void Analyseur_converti_JPY_en_EUR()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), -889.11, "JPY", "Loisir"),
+
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
+        
+        Assert.That(result.Balance, Is.EqualTo(-428.55102).Within(Tolerance));
     }
 }
