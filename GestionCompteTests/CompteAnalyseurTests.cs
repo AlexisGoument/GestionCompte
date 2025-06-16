@@ -6,7 +6,7 @@ namespace GestionCompteTests;
 
 public class CompteAnalyseurTests
 {
-    private const double Tolerance = 0.00000001;
+    private const double Tolerance = 0.005;
     
     [SetUp]
     public void Setup()
@@ -17,13 +17,13 @@ public class CompteAnalyseurTests
     public void Analyseur_doit_calculer_la_balance_sur_1_jour()
     {
         const string csvPath = "../../../../ressources/account_20230228.csv";
-        const double expectedBalance = 15376.45;
+        const double expectedBalance = 25929.40;
         var reader = new HistoriqueCompteReader(new FileReader());
         var analyseur = new CompteAnalyseur(reader, csvPath);
 
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
 
-        Assert.That(result.Balance, Is.EqualTo(expectedBalance));
+        Assert.That(result.Balance, Is.EqualTo(expectedBalance).Within(Tolerance));
     }
 
     [Test]

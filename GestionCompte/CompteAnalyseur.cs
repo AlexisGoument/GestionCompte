@@ -22,13 +22,14 @@ public class CompteAnalyseur
             .Aggregate(new CompteRapport(),
                 (rapport, transaction) =>
                 {
-                    rapport.Balance += transaction.Devise switch
+                    var montantEur = transaction.Devise switch
                     {
                         "USD" => transaction.Montant * 1.445,
                         "JPY" => transaction.Montant * 0.482,
                         "EUR" => transaction.Montant,
                         _ => throw new ArgumentException($"La devise {transaction.Devise} n'est pas pris en charge par le système.")
                     };
+                    rapport.Balance += montantEur;
                     return rapport;
                 });
         return rapport;
