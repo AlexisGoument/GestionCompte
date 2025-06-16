@@ -6,6 +6,7 @@ namespace GestionCompteTests;
 
 public class CompteAnalyseurTests
 {
+    private const double Tolerance = 0.00000001;
     ICsvReader _reader;
     
     [SetUp]
@@ -122,6 +123,6 @@ public class CompteAnalyseurTests
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
-        Assert.That(result.Balance, Is.EqualTo(7804.9941));
+        Assert.That(result.Balance, Is.EqualTo(7804.9941).Within(Tolerance));
     }
 }
