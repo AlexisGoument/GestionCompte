@@ -4,12 +4,18 @@ namespace GestionCompte;
 
 public class CompteAnalyseur
 {
-    public CompteAnalyseur(ICsvReader reader, ITransactionFactory factory, string ressourcesAccountCsv)
+    private readonly ICsvReader _reader;
+    private readonly ITransactionFactory _factory;
+    private readonly string _csvFilePath;
+
+    public CompteAnalyseur(ICsvReader reader, ITransactionFactory factory, string csvFilePath)
     {
-        throw new NotImplementedException();
+        _reader = reader;
+        _factory = factory;
+        _csvFilePath = csvFilePath;
     }
 
-    public CompteRapport GetValeurADate(DateTime dateTime)
+    public CompteRapport GetValeurADate(DateOnly date)
     {
         throw new NotImplementedException();
     }
