@@ -1,6 +1,6 @@
 namespace GestionCompteTests;
 
-public class Tests
+public class CompteParseurTests
 {
     [SetUp]
     public void Setup()
@@ -10,6 +10,6 @@ public class Tests
     [Test]
     public void Test1()
     {
-        Assert.Pass();
+        var parseur = new CompteParseur();
     }
 }
