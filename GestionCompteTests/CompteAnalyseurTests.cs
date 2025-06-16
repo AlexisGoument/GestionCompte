@@ -157,4 +157,22 @@ public class CompteAnalyseurTests
         
         Assert.Throws<ArgumentException>(() => analyseur.GetValeurADate(new DateOnly(2022, 01, 01)));
     }
+
+    [Test]
+    public void Analyseur_fait_la_somme_des_devises_converti_en_EUR()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), 5401.38, "USD", "Primes"),
+            new Transaction(new DateOnly(2022, 01, 01), -1000, "EUR", "Hotel"),
+            new Transaction(new DateOnly(2022, 01, 01), -889.11, "JPY", "Loisir"),
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
+        
+        Assert.That(result.Balance, Is.EqualTo(6376.44308).Within(Tolerance));
+    }
 }
