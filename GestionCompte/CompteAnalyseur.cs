@@ -17,6 +17,17 @@ public class CompteAnalyseur
 
     public CompteRapport GetValeurADate(DateOnly date)
     {
-        throw new NotImplementedException();
+        var lines = _reader.GetLines(_csvFilePath);
+        var operations = lines.Select(line => _factory.GetTransaction(line));
+
+        var rapport = operations
+            .Where(operation => operation.Date <= date)
+            .Aggregate(new CompteRapport(),
+                (rapport, transaction) =>
+                {
+                    rapport.Balance += transaction.Montant;
+                    return rapport;
+                });
+        return rapport;
     }
 }
