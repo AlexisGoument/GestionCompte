@@ -9,6 +9,13 @@ public class FileReader : IFileReader
 {
     public StreamReader GetStream(string csvFilePath)
     {
-        return new StreamReader(csvFilePath);
+        var reader = new StreamReader(csvFilePath);
+        
+        //Ignore first 3 lines
+        reader.ReadLine();
+        reader.ReadLine();
+        reader.ReadLine();
+        
+        return reader;
     }
 }

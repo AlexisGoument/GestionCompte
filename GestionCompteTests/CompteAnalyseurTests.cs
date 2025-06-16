@@ -18,7 +18,7 @@ public class CompteAnalyseurTests
     {
         const string csvPath = "../../../../ressources/account_20230228.csv";
         const double expectedBalance = 15376.45;
-        var reader = Substitute.For<IHistoriqueCompteReader>();
+        var reader = new HistoriqueCompteReader(new FileReader());
         var analyseur = new CompteAnalyseur(reader, csvPath);
 
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
