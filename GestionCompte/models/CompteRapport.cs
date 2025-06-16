@@ -1,6 +1,7 @@
 namespace GestionCompte.models;
 
-public record CompteRapport
+public record CompteRapport(DateOnly DateFinIncluse)
 {
-    public double Balance;
+    public DateOnly DateFinIncluse = DateFinIncluse;
+    public double Balance = 0;
 }

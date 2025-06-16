@@ -19,7 +19,7 @@ public class CompteAnalyseur
 
         var rapport = transactions
             .Where(transaction => transaction.Date <= date)
-            .Aggregate(new CompteRapport(),
+            .Aggregate(new CompteRapport(date),
                 (rapport, transaction) =>
                 {
                     var montantEur = transaction.Devise switch
