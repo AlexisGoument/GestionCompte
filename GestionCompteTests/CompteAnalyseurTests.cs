@@ -53,4 +53,58 @@ public class CompteAnalyseurTests
         
         Assert.That(result.Balance, Is.EqualTo(5401.38));
     }
+
+    [Test]
+    public void Analyseur_retourne_rapport_pour_2_transactions()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes"),
+            new Transaction(new DateOnly(2022, 01, 01), 1000, "EUR", "Hotel")
+
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
+        
+        Assert.That(result.Balance, Is.EqualTo(6401.38));
+    }
+
+    [Test]
+    public void Analyseur_retourne_rapport_pour_2_jours()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes"),
+            new Transaction(new DateOnly(2022, 01, 02), -1000, "EUR", "Hotel")
+
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 02));
+        
+        Assert.That(result.Balance, Is.EqualTo(4401.38));
+    }
+
+    [Test]
+    public void Analyseur_ne_prend_pas_en_compte_les_jours_en_dehors_de_la_période_calculee()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes"),
+            new Transaction(new DateOnly(2022, 01, 02), -1000, "EUR", "Hotel")
+
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
+        
+        Assert.That(result.Balance, Is.EqualTo(5401.38));
+    }
 }
