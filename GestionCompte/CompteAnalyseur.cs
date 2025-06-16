@@ -4,23 +4,20 @@ namespace GestionCompte;
 
 public class CompteAnalyseur
 {
-    private readonly ICsvReader _reader;
-    private readonly ITransactionFactory _factory;
+    private readonly IHistoriqueCompteReader _reader;
     private readonly string _csvFilePath;
 
-    public CompteAnalyseur(ICsvReader reader, ITransactionFactory factory, string csvFilePath)
+    public CompteAnalyseur(IHistoriqueCompteReader reader, string csvFilePath)
     {
         _reader = reader;
-        _factory = factory;
         _csvFilePath = csvFilePath;
     }
 
     public CompteRapport GetValeurADate(DateOnly date)
     {
-        var lines = _reader.GetLines(_csvFilePath);
-        var operations = _factory.GetTransactions(lines);
+        var transactions = _reader.GetTransactions(_csvFilePath);
 
-        var rapport = operations
+        var rapport = transactions
             .Where(operation => operation.Date <= date)
             .Aggregate(new CompteRapport(),
                 (rapport, transaction) =>

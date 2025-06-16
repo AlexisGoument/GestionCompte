@@ -7,12 +7,10 @@ namespace GestionCompteTests;
 public class CompteAnalyseurTests
 {
     private const double Tolerance = 0.00000001;
-    ICsvReader _reader;
     
     [SetUp]
     public void Setup()
     {
-        _reader = Substitute.For<ICsvReader>();
     }
 
     [Test]
@@ -20,8 +18,8 @@ public class CompteAnalyseurTests
     {
         const string csvPath = "../../../../ressources/account_20230228.csv";
         const double expectedBalance = 15376.45;
-        var factory = new TransactionFactory();
-        var analyseur = new CompteAnalyseur(_reader, factory, csvPath);
+        var reader = Substitute.For<IHistoriqueCompteReader>();
+        var analyseur = new CompteAnalyseur(reader, csvPath);
 
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
 
@@ -31,8 +29,8 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_retourne_rapport_pour_0_transaction()
     {
-        var factory = Substitute.For<ITransactionFactory>();
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        var reader = Substitute.For<IHistoriqueCompteReader>();
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
@@ -42,13 +40,13 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_retourne_rapport_pour_1_transaction()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes")
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
@@ -58,15 +56,16 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_retourne_rapport_pour_2_transactions()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
+
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes"),
             new Transaction(new DateOnly(2022, 01, 01), 1000, "EUR", "Hotel")
 
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
@@ -76,15 +75,15 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_retourne_rapport_pour_2_jours()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes"),
             new Transaction(new DateOnly(2022, 01, 02), -1000, "EUR", "Hotel")
 
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 02));
         
@@ -94,15 +93,15 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_ne_prend_pas_en_compte_les_jours_en_dehors_de_la_période_calculee()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), 5401.38, "EUR", "Primes"),
             new Transaction(new DateOnly(2022, 01, 02), -1000, "EUR", "Hotel")
 
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
@@ -112,14 +111,14 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_converti_USD_en_EUR()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), 5401.38, "USD", "Primes"),
 
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
@@ -129,14 +128,14 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_converti_JPY_en_EUR()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), -889.11, "JPY", "Loisir"),
 
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
@@ -146,14 +145,14 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_ne_prend_pas_en_compte_les_devises_autres_que_EUR_JPY_USD()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), -889.11, "devise inconnue", "Loisir"),
 
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         Assert.Throws<ArgumentException>(() => analyseur.GetValeurADate(new DateOnly(2022, 01, 01)));
     }
@@ -161,15 +160,15 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_fait_la_somme_des_devises_converti_en_EUR()
     {
-        var factory = Substitute.For<ITransactionFactory>();
+        var reader = Substitute.For<IHistoriqueCompteReader>();
         var transactions = new[]
         {
             new Transaction(new DateOnly(2022, 01, 01), 5401.38, "USD", "Primes"),
             new Transaction(new DateOnly(2022, 01, 01), -1000, "EUR", "Hotel"),
             new Transaction(new DateOnly(2022, 01, 01), -889.11, "JPY", "Loisir"),
         };
-        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
-        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        reader.GetTransactions(Arg.Any<string>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(reader, string.Empty);
         
         var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
         
