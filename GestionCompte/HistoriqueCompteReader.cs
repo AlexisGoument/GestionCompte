@@ -1,6 +1,7 @@
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using GestionCompte.models;
 
 namespace GestionCompte;
@@ -27,6 +28,10 @@ public class HistoriqueCompteReader : IHistoriqueCompteReader
         };
         using var reader = _fileReader.GetStream(csvFilePath);
         using var csv = new CsvReader(reader, config);
+        
+        var options = new TypeConverterOptions { Formats = new[] { "dd/MM/yyyy" } };
+        csv.Context.TypeConverterOptionsCache.AddOptions<DateOnly>(options);
+        
         return csv.GetRecords<Transaction>().ToArray();
     }
 }
