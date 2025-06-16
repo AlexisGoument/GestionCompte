@@ -27,6 +27,19 @@ public class CompteAnalyseurTests
     }
 
     [Test]
+    public void Analyseur_doit_calculer_la_balance_sur_2_jours()
+    {
+        const string csvPath = "../../../../ressources/account_20230228.csv";
+        const double expectedBalance = 20212.72;
+        var reader = new HistoriqueCompteReader(new FileReader());
+        var analyseur = new CompteAnalyseur(reader, csvPath);
+
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 02));
+
+        Assert.That(result.Balance, Is.EqualTo(expectedBalance).Within(Tolerance));
+    }
+
+    [Test]
     public void Analyseur_retourne_rapport_pour_0_transaction()
     {
         var reader = Substitute.For<IHistoriqueCompteReader>();
