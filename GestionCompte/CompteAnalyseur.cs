@@ -29,7 +29,8 @@ public class CompteAnalyseur
                     {
                         "USD" => transaction.Montant * 1.445,
                         "JPY" => transaction.Montant * 0.482,
-                        _ => transaction.Montant
+                        "EUR" => transaction.Montant,
+                        _ => throw new ArgumentException($"La devise {transaction.Devise} n'est pas pris en charge par le système.")
                     };
                     return rapport;
                 });
