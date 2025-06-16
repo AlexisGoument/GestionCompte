@@ -142,4 +142,19 @@ public class CompteAnalyseurTests
         
         Assert.That(result.Balance, Is.EqualTo(-428.55102).Within(Tolerance));
     }
+
+    [Test]
+    public void Analyseur_ne_prend_pas_en_compte_les_devises_autres_que_EUR_JPY_USD()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), -889.11, "devise inconnue", "Loisir"),
+
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        Assert.Throws<ArgumentException>(() => analyseur.GetValeurADate(new DateOnly(2022, 01, 01)));
+    }
 }
