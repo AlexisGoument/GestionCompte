@@ -107,4 +107,21 @@ public class CompteAnalyseurTests
         
         Assert.That(result.Balance, Is.EqualTo(5401.38));
     }
+
+    [Test]
+    public void Analyseur_retourne_converti_USD_en_EUR()
+    {
+        var factory = Substitute.For<ITransactionFactory>();
+        var transactions = new[]
+        {
+            new Transaction(new DateOnly(2022, 01, 01), 5401.38, "USD", "Primes"),
+
+        };
+        factory.GetTransactions(Arg.Any<string[]>()).Returns(transactions);
+        var analyseur = new CompteAnalyseur(_reader, factory, string.Empty);
+        
+        var result = analyseur.GetValeurADate(new DateOnly(2022, 01, 01));
+        
+        Assert.That(result.Balance, Is.EqualTo(7804.9941));
+    }
 }
