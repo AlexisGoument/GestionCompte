@@ -18,7 +18,7 @@ public class CompteAnalyseur
         var transactions = _reader.GetTransactions(_csvFilePath);
 
         var rapport = transactions
-            .Where(operation => operation.Date <= date)
+            .Where(transaction => transaction.Date <= date)
             .Aggregate(new CompteRapport(),
                 (rapport, transaction) =>
                 {
