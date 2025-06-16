@@ -18,7 +18,7 @@ public class CompteAnalyseur
     public CompteRapport GetValeurADate(DateOnly date)
     {
         var lines = _reader.GetLines(_csvFilePath);
-        var operations = lines.Select(line => _factory.GetTransaction(line));
+        var operations = _factory.GetTransactions(lines);
 
         var rapport = operations
             .Where(operation => operation.Date <= date)
