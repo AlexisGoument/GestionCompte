@@ -13,7 +13,7 @@ public class CompteAnalyseurTests
     [Test]
     public void Analyseur_doit_calculer_la_balance_sur_1_jour()
     {
-        const string csvPath = "../ressources/account_20230228.csv";
+        const string csvPath = "../../../../ressources/account_20230228.csv";
         const double expectedBalance = 15376.45;
         var reader = new CsvReader();
         var factory = new TransactionFactory();
