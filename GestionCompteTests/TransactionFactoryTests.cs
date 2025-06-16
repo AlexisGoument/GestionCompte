@@ -2,7 +2,7 @@ using GestionCompte;
 
 namespace GestionCompteTests;
 
-public class CompteParseurTests
+public class TransactionFactoryTests
 {
     [SetUp]
     public void Setup()
@@ -12,6 +12,6 @@ public class CompteParseurTests
     [Test]
     public void Test1()
     {
-        var parseur = new CompteParseur();
+        var parseur = new TransactionFactory();
     }
 }

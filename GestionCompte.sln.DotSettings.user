@@ -1,0 +1,16 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=58c56b00_002Df81e_002D48fd_002Da74f_002Dc8e84271fcf4/@EntryIndexedValue">&lt;SessionState ContinuousTestingIsOn="True" ContinuousTestingMode="3" IsActive="True" Name="Continuous Testing" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::0B9CDD00-04C0-444E-B8BF-32F10B121B06::net8.0::GestionCompteTests.CompteAnalyseurTests.Analyseur_doit_calculer_la_balance_sur_1_jour&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cb54eedd_002D3d35_002D4b7a_002D89a8_002Dacd2192099e1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Analyseur_doit_calculer_la_balance_sur_la_periode_fournie #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::0B9CDD00-04C0-444E-B8BF-32F10B121B06::net8.0::GestionCompteTests.CompteAnalyseurTests.Analyseur_doit_calculer_la_balance_sur_la_periode_fournie&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ea756d5d_002Dec88_002D4e8b_002D80af_002D019e87fd1d3a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Analyseur_doit_calculer_la_balance_sur_la_periode_fournie" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::0B9CDD00-04C0-444E-B8BF-32F10B121B06::net8.0::GestionCompteTests.CompteAnalyseurTests.Analyseur_doit_calculer_la_balance_sur_1_jour&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
