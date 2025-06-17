@@ -7,7 +7,7 @@ var reader = new HistoriqueCompteReader(new FileReader());
 var analyseur = new CompteAnalyseur(reader, csvPath);
 
 var hasOnlyOneArg = args.Length == 1;
-bool ArgIsNotDate(out DateOnly date) => !DateOnly.TryParse(args[0], out date);
+bool ArgIsNotDate(out DateOnly date) => !DateOnly.TryParseExact(args[0], "dd/MM/yyyy", out date);
 if (!hasOnlyOneArg || ArgIsNotDate(out DateOnly maxDate))
 {
     WriteUsage();
